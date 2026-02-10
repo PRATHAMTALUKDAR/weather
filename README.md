@@ -27,6 +27,7 @@ It features smooth animations, dynamic backgrounds, and a clean UI.
 ## 📱 Screenshots
 
 ![sunny](sunny.png)
+![gradient_test](gradient_test.jpeg)
 
 ---
 
