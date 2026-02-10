@@ -26,46 +26,117 @@ class _WeatherPageState extends State<WeatherPage> {
     setState(() {
       _weather = weather;
     });
-  } catch (e) {
-    print("ERROR in fetchWeather: $e");
+    } catch (e) {
+      print("ERROR in fetchWeather: $e");
+    }
   }
-}
 
+  DateTime now = DateTime.now();
+  int get hour => now.hour;
+  String isNight = "";
+  void checkNight(int hour){
+    if((hour >= 0 && hour <= 6) || (hour >= 18 && hour <= 0)){
+      isNight= "night";
+    }
+    isNight = "day";
+  }
 
-
-  String getWeatherAnimation(String? mainCondition) {
+  String getWeatherAnimation(String? mainCondition, String? isNight) {
     if(mainCondition == null){
       return 'assets/sunny.json';
     }
     switch(mainCondition.toLowerCase()){
       case 'clouds':
+        if(isNight == "day"){
+          return 'assets/windy.json';
+        }
+        else{
+          return 'assets/night_cloudy.json';
+        }
       case 'mist':
+      if(isNight == "day"){
+          return 'assets/windy.json';
+        }
+        else{
+          return 'assets/night_cloudy.json';
+        }
       case 'smoke':
+      if(isNight == "day"){
+          return 'assets/windy.json';
+        }
+        else{
+          return 'assets/night_cloudy.json';
+        }
       case 'dust':
+      if(isNight == "day"){
+          return 'assets/windy.json';
+        }
+        else{
+          return 'assets/night_cloudy.json';
+        }
       case 'haze':
-        return 'assets/windy.json';
+      if(isNight == "day"){
+          return 'assets/windy.json';
+        }
+        else{
+          return 'assets/night_cloudy.json';
+        }
       case 'rain':
+        if(isNight == "day"){
+            return 'assets/rain.json';
+          }
+          else{
+            return 'assets/night_rainy.json';
+          }
       case 'drizzle':
+        if(isNight == "day"){
+            return 'assets/rain.json';
+          }
+          else{
+            return 'assets/night_rainy.json';
+          }
       case 'shower rain':
-        return 'assets/rain.json';
+        if(isNight == "day"){
+            return 'assets/rain.json';
+          }
+          else{
+            return 'assets/night_rainy.json';
+          }
       case 'thunderstorm':
-        return 'assets/storm.json';
+        if(isNight == "day"){
+            return 'assets/storm.json';
+          }
+          else{
+            return 'assets/night_rainy.json';
+          }
       case 'clear':
-        return 'assets/sunny.json';
+        if(isNight == "day"){
+            return 'assets/sunny.json';
+          }
+          else{
+            return 'assets/night_clear.json';
+          }
       default:
-        return 'assets/sunny.json';
+        if(isNight == "day"){
+            return 'assets/sunny.json';
+          }
+          else{
+            return 'assets/night_clear.json';
+          }
     }
   }
 
   Color bgcolor(String? weather){
-    switch(weather){
+    if(weather==null){
+        return const Color.fromARGB(255, 150, 150, 150);
+    }
+    switch(weather.toLowerCase()){
       case 'clouds':
-        return Colors.blueGrey;
       case 'mist':
       case 'smoke':
       case 'dust':
       case 'haze':
-        return Colors.blueGrey;
+        return const Color.fromARGB(255, 150, 150, 150);
       case 'rain':
       case 'drizzle':
       case 'shower rain':
@@ -85,35 +156,95 @@ class _WeatherPageState extends State<WeatherPage> {
     _fetchWeather();
   }
 
+  BoxDecoration getWeatherGradient(String? condition) {
+  switch (condition?.toLowerCase()) {
+    case 'clear':
+      return const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [ Color.fromARGB(255, 38, 175, 255),Color.fromARGB(255, 210, 210, 210),],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      );
+
+    case 'clouds':
+    case 'mist':
+    case 'smoke':
+    case 'haze':
+      return const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color.fromARGB(255, 61, 65, 75), Color.fromARGB(255, 153, 153, 153)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      );
+
+    case 'rain':
+    case 'drizzle':
+      return const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color.fromARGB(255, 57, 57, 57), Color.fromARGB(255, 98, 98, 98)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      );
+
+    case 'thunderstorm':
+      return const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF232526), Color(0xFF414345)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      );
+
+    default:
+      return const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF56CCF2), Color.fromARGB(255, 196, 196, 196)],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      );
+    }
+  }
+
+
+  double get screenWidth => MediaQuery.of(context).size.width;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.location_on_sharp,size: 50,),
-            Padding(
-              padding: const EdgeInsets.only(top:20.0),
-              child: Text(_weather?.cityName ?? "Loading city...",    //city
-              style: TextStyle(fontSize: 35,),),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:80.0),
-              child: Lottie.asset(getWeatherAnimation(_weather?.condition)),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:70.0),
-              child:Text(_weather == null ? "--°" : "${_weather!.temp.round()}°",
-                style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+        child: Container(
+          decoration: getWeatherGradient(_weather?.condition),
+          width: screenWidth,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.location_on_sharp,size: 50,),
+              Padding(
+                padding: const EdgeInsets.only(top:20.0),
+                child: Text(_weather?.cityName ?? "Loading city...",    //city
+                style: TextStyle(fontSize: 35,),),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top:50.0),
-              child: Text('${_weather?.condition}',            //condition
-              style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top:80.0),
+                child: Lottie.asset(getWeatherAnimation(_weather?.condition,isNight)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:70.0),
+                child:Text(_weather == null ? "..." : "${_weather!.temp.round()}°",
+                  style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:50.0),
+                child: Text(_weather?.condition == null ? "calculating" :'${_weather?.condition}',            //condition
+                style: TextStyle(fontSize: 35,fontWeight: FontWeight.w400),),
+              ),
+            ],
+          ),
         ),
       ),
       backgroundColor: bgcolor(_weather?.condition),
