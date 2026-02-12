@@ -27,8 +27,16 @@ It features smooth animations, dynamic backgrounds, and a clean UI.
 ## 📱 Screenshots
 
 <p align="center">
-  <img src="screenshots/sunny.png" width="50%" />
-  <img src="screenshots/gradient_test.jpeg" width="50%" />
+  <table>
+    <tr>
+      <td align="center">
+        <img src="screenshots/sunny.png" width="300"/>
+      </td>
+      <td align="center">
+        <img src="screenshots/gradient_test.jpeg" width="300"/>
+      </td>
+    </tr>
+  </table>
 </p>
 
 ## 🛠 Built With
