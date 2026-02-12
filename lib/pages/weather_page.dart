@@ -31,93 +31,92 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
-  DateTime now = DateTime.now();
-  int get hour => now.hour;
-  String isNight = "";
-  void checkNight(int hour){
-    if((hour >= 0 && hour <= 6) || (hour >= 18 && hour <= 0)){
-      isNight= "night";
+  bool isDay(){
+    int hour = DateTime.now().hour;
+    if(hour >= 6 && hour <= 18){
+      return true;
     }
-    isNight = "day";
+    return false;
   }
 
-  String getWeatherAnimation(String? mainCondition, String? isNight) {
+  String getWeatherAnimation(String? mainCondition) {
+    bool ifDay = isDay();
     if(mainCondition == null){
       return 'assets/sunny.json';
     }
     switch(mainCondition.toLowerCase()){
       case 'clouds':
-        if(isNight == "day"){
+        if(ifDay){
           return 'assets/windy.json';
         }
         else{
           return 'assets/night_cloudy.json';
         }
       case 'mist':
-      if(isNight == "day"){
+          if(ifDay){
           return 'assets/windy.json';
         }
         else{
           return 'assets/night_cloudy.json';
         }
       case 'smoke':
-      if(isNight == "day"){
+          if(ifDay){
           return 'assets/windy.json';
         }
         else{
           return 'assets/night_cloudy.json';
         }
       case 'dust':
-      if(isNight == "day"){
+          if(ifDay){
           return 'assets/windy.json';
         }
         else{
           return 'assets/night_cloudy.json';
         }
       case 'haze':
-      if(isNight == "day"){
+          if(ifDay){
           return 'assets/windy.json';
         }
         else{
           return 'assets/night_cloudy.json';
         }
       case 'rain':
-        if(isNight == "day"){
+          if(ifDay){
             return 'assets/rain.json';
           }
           else{
             return 'assets/night_rainy.json';
           }
       case 'drizzle':
-        if(isNight == "day"){
+          if(ifDay){
             return 'assets/rain.json';
           }
           else{
             return 'assets/night_rainy.json';
           }
       case 'shower rain':
-        if(isNight == "day"){
+          if(ifDay){
             return 'assets/rain.json';
           }
           else{
             return 'assets/night_rainy.json';
           }
       case 'thunderstorm':
-        if(isNight == "day"){
+          if(ifDay){
             return 'assets/storm.json';
           }
           else{
             return 'assets/night_rainy.json';
           }
       case 'clear':
-        if(isNight == "day"){
+          if(ifDay){
             return 'assets/sunny.json';
           }
           else{
             return 'assets/night_clear.json';
           }
       default:
-        if(isNight == "day"){
+          if(ifDay){
             return 'assets/sunny.json';
           }
           else{
@@ -225,22 +224,22 @@ class _WeatherPageState extends State<WeatherPage> {
               Icon(Icons.location_on_sharp,size: 50,),
               Padding(
                 padding: const EdgeInsets.only(top:20.0),
-                child: Text(_weather?.cityName ?? "Loading city...",    //city
+                child: Text(_weather?.cityName ?? " ",    //city
                 style: TextStyle(fontSize: 35,),),
               ),
               Padding(
                 padding: const EdgeInsets.only(top:80.0),
-                child: Lottie.asset(getWeatherAnimation(_weather?.condition,isNight)),
+                child: Lottie.asset(getWeatherAnimation(_weather?.condition)),
               ),
               Padding(
                 padding: const EdgeInsets.only(top:70.0),
-                child:Text(_weather == null ? "..." : "${_weather!.temp.round()}°",
+                child:Text(_weather == null ? " " : "${_weather!.temp.round()}°",
                   style: TextStyle(fontSize: 50, fontWeight: FontWeight.w400),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top:50.0),
-                child: Text(_weather?.condition == null ? "calculating" :'${_weather?.condition}',            //condition
+                child: Text(_weather?.condition == null ? " " :'${_weather?.condition}',            //condition
                 style: TextStyle(fontSize: 35,fontWeight: FontWeight.w400),),
               ),
             ],
